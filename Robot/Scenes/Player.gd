@@ -1,4 +1,4 @@
-extends Area2D
+extends KinematicBody2D
 
 
 export var speed = 100
@@ -26,6 +26,12 @@ func _process(delta):
 	else:
 		$AnimatedSprite.stop()
 		
-	position += velocity * delta
-	position.x = clamp(position.x, 0, screen_size.x)
-	position.y = clamp(position.y, 0, screen_size.y)
+	# using move_and_collide
+	var collision = move_and_collide(velocity * delta)
+	if collision:
+		velocity = velocity.slide(collision.normal)
+
+	# using move_and_slide
+	velocity = move_and_slide(velocity)
+	
+	
